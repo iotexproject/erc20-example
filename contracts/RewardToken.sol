@@ -1,4 +1,4 @@
-pragma solidity ^0.8.0;
+pragma solidity 0.6.0-0.8.0;
 
 import "@openzeppelin/contracts-ethereum-package/contracts/access/ownable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
@@ -15,7 +15,7 @@ contract RewardToken is ERC20UpgradeSafe, OwnableUpgradeSafe {
     }
 
     function mint(address _account, uint256 _amount) external {
-        require(operators[_account], "invalid operator");
+        require(operators[_msgSender()], "invalid operator");
         _mint(_account, _amount);
     }
 
@@ -26,12 +26,12 @@ contract RewardToken is ERC20UpgradeSafe, OwnableUpgradeSafe {
     function addOperator(address _account) external onlyOwner {
         require(!operators[_account], "already an operator");
         operators[_account] = true;
-        emit OpreatorAdded(_account);
+        emit OperatorAdded(_account);
     }
 
     function removeOperator(address _account) external onlyOwner {
         require(operators[_account], "not an operator");
         operators[_account] = false;
-        emit OpreatorRemoved(_account);        
+        emit OperatorRemoved(_account);
     }
 }
